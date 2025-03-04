@@ -217,7 +217,7 @@ def main():
     global args
     parser = argparse.ArgumentParser(prog='vwbackup',
                 description='This program is a wrapper around Bitwarden CLI to create backups')
-    parser.add_argument("-o", "--output", help="Full path to output folder", default="/app/output")
+    parser.add_argument("-o", "--output", help="Full path to output folder (Defaults to /app/output for docker container)", default="/app/output")
     parser.add_argument("-s", "--server", help="Server URL if using self hosted instance")
     parser.add_argument("--email", help="User email login")
     parser.add_argument("--password", help="User password for login (fairly insecure)")
