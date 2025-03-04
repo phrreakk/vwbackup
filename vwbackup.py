@@ -141,7 +141,7 @@ def bwLogin():
 def bwUserBackup():
     now = datetime.now()
     global filePath
-    filePath = args.FOLDER + "/" + now.strftime("%Y") + "/" + now.strftime("%m") + "/" + now.strftime("%d") + "/"
+    filePath = args.output + "/" + now.strftime("%Y") + "/" + now.strftime("%m") + "/" + now.strftime("%d") + "/"
     if (args.debug):
         print(f"File path: {filePath}")
     
@@ -217,7 +217,7 @@ def main():
     global args
     parser = argparse.ArgumentParser(prog='vwbackup',
                 description='This program is a wrapper around Bitwarden CLI to create backups')
-    parser.add_argument("FOLDER", help="Full path to output folder")
+    parser.add_argument("-o", "--output", help="Full path to output folder", default="/app/output")
     parser.add_argument("-s", "--server", help="Server URL if using self hosted instance")
     parser.add_argument("--email", help="User email login")
     parser.add_argument("--password", help="User password for login (fairly insecure)")
@@ -231,7 +231,7 @@ def main():
     if (args.debug):
         print(f"Args debug: {args.debug}")
         print("bw found at: " + bw_cli_path)
-        print(f"Args output folder: {args.FOLDER}")
+        print(f"Args output folder: {args.output}")
         print(f"Args email: {args.email}")
         print(f"Args password: {args.password}")
         print(f"Args server: {args.orgs}")
