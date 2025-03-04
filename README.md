@@ -14,11 +14,9 @@ vwbackup is a python application that backs up a Vaultwarden* user vault and/or 
 
 * All backups (user and orgs) are encrypted with the user password given during runtime.
 
-## Limitations
+## Security Limitations
 
 * Master user password is required for exporting a vault.
-
-* Docker container is a work in progress right now.  Running script with --docker requires specific environment args to be in place.
 
 ## Installation
 
@@ -43,11 +41,9 @@ For a truly platform independent solution, use the official docker image:
 ## Usage
 
 ```text
-positional arguments:
-  FOLDER               Full path to output folder
-
 options:
   -h, --help           show this help message and exit
+  -o, --output OUTPUT  Full path to output folder (Defaults to /app/output for docker container)
   -s, --server SERVER  Server URL if using self hosted instance
   --email EMAIL        User email login
   --password PASSWORD  User password for login (fairly insecure)
@@ -56,7 +52,7 @@ options:
   --debug              Debug output
 ```
 
-* FOLDER is the only required argument.  (Full paths are suggested but relative paths are accepted)
+* ```-o or --output```is used to direct the application where to store your encrypted output files.  This will default to ```/app/output``` for compatibility with the docker container run, but you may change it for Python script runs.  (Full paths are suggested but relative paths are accepted)
 
 * ```-s or --server``` is used to change the location of the Vaultwarden instance if you are self-hosting the instance.  By default, the server is pointed at the default Bitwarden instance in the cloud.
 
