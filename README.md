@@ -8,7 +8,7 @@ vwbackup is a python application that backs up a Vaultwarden* user vault and/or 
 
 * vwbackup can take input from command line arguments, an .env file, or environment variables.
 
-* vwbackup will output files to a directory of your choosing with a folder structure containing /Year/Month/Day folders automatically.  Example /output_folder/2025/02/24/email_passwords.enc
+* vwbackup will automatically output files to a directory of your choosing with a folder structure containing /Year/Month/Day folders.  Example /output_folder/2025/02/24/email_passwords.enc
 
 * vwbackup will automatically prepend user email to user vaults.  Organization names will be prepended to organization vaults.
 
