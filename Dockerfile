@@ -1,17 +1,34 @@
 # syntax=docker/dockerfile:1
 ARG UID=1000
 
-FROM python:3.13-slim
+FROM debian:bookworm-slim as bwgetter
 
 WORKDIR /app
 
-# Install under /root/.local
-ENV PIP_USER="true"
-ARG PIP_NO_WARN_SCRIPT_LOCATION=0
-ARG PIP_ROOT_USER_ACTION="ignore"
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y wget zip
+
+# Bitwarden CLI Vars
+ENV BW_SHA=f1d66b1a3971cc906ea3e44f0647899c1ca0c95ca83714fcf3039c0643dcd97a
+ENV BW_ZIP="bw-linux-2025.1.3.zip"
+ENV BW_LINK="https://github.com/bitwarden/clients/releases/download/cli-v2025.1.3/$BW_ZIP"
+
+# Get Bitwarden CLI
+RUN wget $BW_LINK
+RUN echo "$BW_SHA $BW_ZIP" | sha256sum --check --status
+RUN unzip $BW_ZIP
+
+FROM python:3.13-slim as final
+
+WORKDIR /app
+
+# Install BW CLI
+COPY --chown=$UID:0 --chmod=775 --from=bwgetter /app/bw /usr/local/bin/
 
 # Install build dependencies
-RUN apt-get update && apt-get upgrade -y \
+RUN apt-get update \
+    && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create user
@@ -20,14 +37,16 @@ RUN groupadd -g $UID $UID && \
     useradd -l -u $UID -g $UID -m -s /bin/sh -N $UID
 
 # Create directories with correct permissions
-RUN mkdir /output
+RUN mkdir /app/output
 RUN install -d -m 775 -o $UID -g 0 /app
-RUN install -d -m 775 -o $UID -g 0 /output
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
 COPY --chown=$UID:0 --chmod=775 . /app
 
 # Install requirements
+ENV VIRTUAL_ENV=/opt/venv
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip install -r requirements.txt
 
 # Rich logging
@@ -39,6 +58,6 @@ USER $UID
 
 STOPSIGNAL SIGINT
 
-ENTRYPOINT ["vwbackup"]
+ENTRYPOINT ["python"]
 
-CMD [ "--docker" ]
+CMD [ "vwbackup.py", "--docker" ]
