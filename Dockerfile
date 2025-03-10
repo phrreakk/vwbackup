@@ -33,15 +33,15 @@ RUN apt-get update \
 
 # Create user
 ARG UID
-RUN groupadd -g $UID $UID && \
-    useradd -l -u $UID -g $UID -m -s /bin/sh -N $UID
+
+RUN useradd -m -s /bin/sh vwbackup
 
 # Create directories with correct permissions
 RUN mkdir /app/output
-RUN install -d -m 775 -o $UID -g 0 /app
+RUN install -d -m 775 /app
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --chown=$UID:0 --chmod=775 . /app
+COPY --chmod=775 . /app
 
 # Install requirements
 ENV VIRTUAL_ENV=/opt/venv
@@ -53,9 +53,7 @@ RUN pip install -r requirements.txt
 # https://rich.readthedocs.io/en/stable/console.html#interactive-mode
 ENV FORCE_COLOR="true"
 ENV COLUMNS="100"
-
-USER $UID
-
+USER vwbackup
 STOPSIGNAL SIGINT
 
 ENTRYPOINT ["python"]
