@@ -41,7 +41,7 @@ RUN mkdir /app/output
 RUN install -d -m 775 /app
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --chmod=775 . /app
+COPY --chown=vwbackup:0--chmod=775 . /app
 
 # Install requirements
 ENV VIRTUAL_ENV=/opt/venv
