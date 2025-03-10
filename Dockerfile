@@ -1,6 +1,4 @@
 # syntax=docker/dockerfile:1
-ARG UID=1000
-
 FROM debian:bookworm-slim as bwgetter
 
 WORKDIR /app
@@ -23,9 +21,6 @@ FROM python:3.13-slim as final
 
 WORKDIR /app
 
-# Install BW CLI
-COPY --chown=$UID:0 --chmod=775 --from=bwgetter /app/bw /usr/local/bin/
-
 # Install build dependencies
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -35,6 +30,9 @@ RUN apt-get update \
 ARG UID
 
 RUN useradd -m -s /bin/sh vwbackup
+
+# Install BW CLI
+COPY --chown=vwbackup:0 --chmod=775 --from=bwgetter /app/bw /usr/local/bin/
 
 # Create directories with correct permissions
 RUN mkdir /app/output
