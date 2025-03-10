@@ -27,16 +27,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Create user
-ARG UID
+ARG UID=3003
 
-RUN useradd -m -s /bin/sh vwbackup
+RUN groupadd -g $UID $UID && \
+    useradd -l -u $UID -g $UID -m -s /bin/sh -N vwbackup
 
 # Install BW CLI
 COPY --chown=vwbackup:0 --chmod=775 --from=bwgetter /app/bw /usr/local/bin/
 
 # Create directories with correct permissions
 RUN mkdir /app/output
-RUN install -d -m 775 /app
+RUN install -d -m 775 -o $UID -g 0 /app
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
 COPY --chown=vwbackup:0--chmod=775 . /app
