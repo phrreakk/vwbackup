@@ -22,9 +22,11 @@ vwbackup is a python application that backs up a Vaultwarden* user vault and/or 
 
 ### Docker container
 
-***TBD***
-
 For a truly platform independent solution, use the official docker image:
+
+```docker pull ghcr.io/phrreakk/vwbackup:2025.1.3-vwbackup1```
+
+The docker tag is tied to the version of the underlying Bitwarden CLI.  In the tag above, the Bitwarden CLI version is 2025.1.3.  I am doing this so that if there are breaking changes in the Bitwarden CLI, you may stay at an older version of vwbackup and keep your backups working.  After the CLI version is a dash and then vwbackup1.  The vwbackup1 is the first update to the logic of the vmbackup tool.  
 
 ### Python runtime
 
@@ -80,6 +82,7 @@ password="This1smiSup3rS3cu4ePassword!"
 | BW_SERVER | No | Full URL to your instance Defaults to <https://bitwarden.com> | <https://myinstance.mydomain.org> |
 | BW_EMAIL | Yes | Email address for the user | <me@mydomain.org> |
 | BW_PASSWORD | Yes | User password to export the vault(s) | mYp@ssword |
+| BW_ORG_BACKUP | No | Whether to backup Organizations as well |True or False |
 
 ## Contributions
 
