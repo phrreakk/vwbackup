@@ -33,8 +33,8 @@ def getBW():
 
 def bwLogin():
     global serverurl
-    if (args.docker):
-        serverurl = os.environ['BW_SERVER']
+    if (args.docker) and os.getenv('BW_SERVER'):
+        serverurl = os.getenv('BW_SERVER')
     else:
         serverurl = args.server
 
@@ -83,8 +83,8 @@ def bwLogin():
     
     # Login
     global bwEmail
-    if (args.docker):
-        bwEmail = os.environ['BW_EMAIL']
+    if (args.docker) and os.getenv('BW_EMAIL'):
+        bwEmail = os.getenv('BW_EMAIL')
     elif (args.email is None) and not (args.docker) and (dotenv):
         bwEmail = str(dotenv['email'])
     elif (args.email) and not (args.docker):
@@ -93,8 +93,8 @@ def bwLogin():
         print("An email is required")
         sys.exit(2)
     
-    if (args.docker):
-        bwPassword = os.environ['BW_PASSWORD']  
+    if (args.docker) and os.getenv('BW_PASSWORD'):
+        bwPassword = os.getenv('BW_PASSWORD')
     elif (args.password is None) and not (args.docker) and (dotenv):
         bwPassword = str(dotenv['password'])
     elif (args.password) and not (args.docker):
@@ -238,8 +238,9 @@ def main():
         print(f"Args server: {args.server}")
         print(f"Args docker: {args.docker}")
         if (args.docker):
-            print(f"Env email: {os.environ['BW_EMAIL']}")
-            print(f"Env password: {os.environ['BW_PASSWORD']}")
+            print(f"Env email: {os.getenv('BW_EMAIL')}")
+            print(f"Env password: {os.getenv('BW_PASSWORD')}")
+            print(f"Env org backup: {os.getenv('BW_ORG_BACKUP')}")
         if (dotenv):
             print(f"Dotenv: {dotenv}")
             print(f"Dotenv Email: {str(dotenv['email'])}")
@@ -249,7 +250,7 @@ def main():
     
     bwUserBackup()
     
-    if (args.docker) or (args.orgs):
+    if (os.getenv('BW_ORG_BACKUP') == 'True') or (args.orgs):
         bwOrgBackup()
     
     bwLogout()
