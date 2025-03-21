@@ -85,7 +85,7 @@ def bwLogin():
     global bwEmail
     if (args.docker):
         bwEmail = os.environ['BW_EMAIL']
-    elif (args.email is None) and not (args.docker):
+    elif (args.email is None) and not (args.docker) and (dotenv):
         bwEmail = str(dotenv['email'])
     elif (args.email) and not (args.docker):
         bwEmail = args.email
@@ -95,7 +95,7 @@ def bwLogin():
     
     if (args.docker):
         bwPassword = os.environ['BW_PASSWORD']  
-    elif (args.password is None) and not (args.docker):
+    elif (args.password is None) and not (args.docker) and (dotenv):
         bwPassword = str(dotenv['password'])
     elif (args.password) and not (args.docker):
         bwPassword = args.password
@@ -218,7 +218,7 @@ def main():
     parser = argparse.ArgumentParser(prog='vwbackup',
                 description='This program is a wrapper around Bitwarden CLI to create backups')
     parser.add_argument("-o", "--output", help="Full path to output folder (Defaults to /app/output for docker container)", default="/app/output")
-    parser.add_argument("-s", "--server", help="Server URL if using self hosted instance")
+    parser.add_argument("-s", "--server", help="Server URL if using self hosted instance", default="https://bitwarden.com")
     parser.add_argument("--email", help="User email login")
     parser.add_argument("--password", help="User password for login (fairly insecure)")
     parser.add_argument("--orgs", help="Backup the organizations you have access to export", action='store_true')
@@ -234,7 +234,7 @@ def main():
         print(f"Args output folder: {args.output}")
         print(f"Args email: {args.email}")
         print(f"Args password: {args.password}")
-        print(f"Args server: {args.orgs}")
+        print(f"Args orgs: {args.orgs}")
         print(f"Args server: {args.server}")
         print(f"Args docker: {args.docker}")
         if (args.docker):
