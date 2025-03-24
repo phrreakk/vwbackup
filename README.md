@@ -26,9 +26,14 @@ For a truly platform independent solution, use the official docker image:
 
 ```docker pull ghcr.io/phrreakk/vwbackup:2025.1.3-vwbackup1```
 
+The docker container runs as the `vwbackup` user with a UID of `3003`.
+
 The docker tag is tied to the version of the underlying Bitwarden CLI.  In the tag above, the Bitwarden CLI version is 2025.1.3.  I am doing this so that if there are breaking changes in the Bitwarden CLI, you may stay at an older version of vwbackup and keep your backups working.  After the CLI version is a dash and then vwbackup1.  The vwbackup1 is the first update to the logic of the vmbackup tool.  
 
 ### Python runtime
+
+* Bitwarden CLI ```2025.1.3``` at time of this writing
+  * <https://github.com/bitwarden/clients/releases/tag/cli-v2025.1.3>
 
 * Install python 3.x. (3.13.1 version this was written against)
 
@@ -39,6 +44,8 @@ The docker tag is tied to the version of the underlying Bitwarden CLI.  In the t
   * ```python -m venv .venv``` inside your folder
 
 * Run ```pip install -r requirements.txt```
+
+\* I am a Linux user.  If you run on Windows, YMMV but Python should function cross platform.  Please open an issue if this is not the case.
 
 ## Usage
 
